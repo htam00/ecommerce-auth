@@ -1,16 +1,51 @@
+const passport = require('passport')
 const Customer = require('../models/Customers')
 
+/*
+ * Local Authentication
+ */
 const addCustomer = async (req, res) => {
 
 }
 
-const findCustomer = async (req, res) => {
- let id = '5f0937912bc51d1d637c40d3'
- await Customer.findById(id, 
-	 (err, customer) => { 
-		 if(err) console.error(err)
-		 console.log(customer)
-	 })
+/* 
+ * Facebook Authentication
+ */
+const facebookAuth = passport.authenticate('facebook')
+
+const facebookAuthCallback = passport.authenticate('facebook', { 
+	successRedirect: "/",
+	failureRedirect: "/fail"
+})
+
+/*
+ * Google Authentication
+ */
+const googleAuth = passport.authenticate('google', { scope: '' })
+
+const googleAuthCallback = passport.authenticate('google', { 
+	successRedirect: "/",
+	failureRedirect: "/fail",
+})
+
+/*
+ * Message Body 
+ */
+const failMessage = (req, res) => {
+	res.send("Failure attemp")
 }
 
-module.exports = { addCustomer, findCustomer }
+const successMessage = (req, res) => {
+	res.send("Success")
+}
+
+
+module.exports = { 
+	addCustomer,
+	facebookAuth,
+	facebookAuthCallback,
+	googleAuth,
+	googleAuthCallback,
+	failMessage,
+	successMessage
+}
