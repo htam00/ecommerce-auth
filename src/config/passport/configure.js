@@ -10,6 +10,7 @@ const { serialize,
 	deserialize 
 } = require('./serialization')
 
+const CustomerModel = require('./../../models/Customers')
 
 // configure activate passport
 const configure = () => {

@@ -4,8 +4,26 @@ const Customer = require('../models/Customers')
 /*
  * Local Authentication
  */
-const addCustomer = async (req, res) => {
+const signinAuth = async (req, res, next) => {
+	passport.authenticate('local', (err, user, info) => { 
+		if (err) { 
+			return next(err) 
+		} 
 
+		if(!user) {
+			return res.redirect(`/login?info=${info}`)
+		}
+
+		req.logIn(user, (err) => {
+			if (err) {
+				return next(err)
+			}
+			return res.redirect('/')
+		})
+	})(req, res, next)
+}
+
+const signupAuth = async (req, res) => {
 }
 
 /* 
@@ -14,7 +32,7 @@ const addCustomer = async (req, res) => {
 const facebookAuth = passport.authenticate('facebook')
 
 const facebookAuthCallback = passport.authenticate('facebook', { 
-	successRedirect: "/",
+	successRedirect: "/", 
 	failureRedirect: "/fail"
 })
 
@@ -39,13 +57,38 @@ const successMessage = (req, res) => {
 	res.send("Success")
 }
 
+/*
+ * Pages Routes
+ */
+const signinPage = (req, res) => {
+	res.send('Login Page')
+}
+
+const signupPage = (req, res) => {
+	res.send('Signup Page')
+}
+
+const profilePage = (req, res) => {
+	res.json(req.user)
+}
+
+/*
+ * Session Exit Account
+ */
+const logout = () => { 
+	// ... 
+}
 
 module.exports = { 
-	addCustomer,
+	signinAuth,
+	signupAuth,
 	facebookAuth,
 	facebookAuthCallback,
 	googleAuth,
 	googleAuthCallback,
 	failMessage,
-	successMessage
+	successMessage,
+	signinPage,
+	signupPage,
+	profilePage
 }

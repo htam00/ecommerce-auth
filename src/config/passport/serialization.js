@@ -1,5 +1,5 @@
 const serialize = (user, done) => {
-	done(null, user)
+	done(null, user.id)
 }
 
 const deserialize = (object, done) => {
