@@ -23,8 +23,12 @@ const signinAuth = async (req, res, next) => {
 	})(req, res, next)
 }
 
-const signupAuth = async (req, res) => {
-}
+const signupAuth = passport.authenticate({
+	successRedirect: '/',
+	failureRedirect: '/fail',
+	failureFlash: true
+})
+
 
 /* 
  * Facebook Authentication
@@ -65,7 +69,8 @@ const signinPage = (req, res) => {
 }
 
 const signupPage = (req, res) => {
-	res.send('Signup Page')
+	const signupMessage = req.flash('signupMessage')
+	res.send(`SignupPage\n${signupMessage}`)
 }
 
 const profilePage = (req, res) => {
@@ -76,7 +81,18 @@ const profilePage = (req, res) => {
  * Session Exit Account
  */
 const logout = () => { 
-	// ... 
+	req.logout()
+	res.redirect('/login')
+}
+
+/*
+ * Logged Confirm
+ */
+const isLoggedIn = (req, res, next) => {
+	if(req.isAuthenticated()) {
+		return next()
+	}
+	res.redirect('/login')
 }
 
 module.exports = { 
@@ -90,5 +106,6 @@ module.exports = {
 	successMessage,
 	signinPage,
 	signupPage,
-	profilePage
+	profilePage,
+	isLoggedIn
 }
