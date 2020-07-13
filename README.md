@@ -18,13 +18,8 @@ $ yarn run dev
 
 # Envoriment
 
-<<<<<<< HEAD
 Configure the file .env
 ```bash
-=======
-Configure the file env
-```
->>>>>>> dea702867ed89c5338fbf0586f5db7bedc1fdc1b
 MONGO_URI=
 
 # Session Secret
