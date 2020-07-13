@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 
 const generateHash = (password) => {
-	return bcrytp.hashSync(
+	return bcrypt.hashSync(
 		password,
 		bcrypt.genSaltSync(8),
 		null
@@ -9,10 +9,7 @@ const generateHash = (password) => {
 }
 
 const validPassword = (user, password) => {
-	return bcrypt.compareSync(
-		password,
-		user.password
-	)
+	return bcrypt.compareSync(password, user.password)
 }
 
 module.exports = {
