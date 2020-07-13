@@ -4,28 +4,16 @@ const Customer = require('../models/Customers')
 /*
  * Local Authentication
  */
-const signinAuth = async (req, res, next) => {
-	passport.authenticate('local', (err, user, info) => { 
-		if (err) { 
-			return next(err) 
-		} 
+const signinAuth = passport.authenticate('local-signin', {
+	successRedirect: '/profile',
+	failureRedirect: '/signin',
+	successFlash: true
+})
 
-		if(!user) {
-			return res.redirect(`/login?info=${info}`)
-		}
 
-		req.logIn(user, (err) => {
-			if (err) {
-				return next(err)
-			}
-			return res.redirect('/')
-		})
-	})(req, res, next)
-}
-
-const signupAuth = passport.authenticate({
-	successRedirect: '/',
-	failureRedirect: '/fail',
+const signupAuth = passport.authenticate('local-signup', {
+	successRedirect: '/profile',
+	failureRedirect: '/signup',
 	failureFlash: true
 })
 
@@ -65,7 +53,9 @@ const successMessage = (req, res) => {
  * Pages Routes
  */
 const signinPage = (req, res) => {
-	res.send('Login Page')
+	const signinMessage = req.flash('signinMessage')
+	res.send(`Login Page\n${signinMessage}`)
+	console.log(signinMessage)
 }
 
 const signupPage = (req, res) => {
@@ -80,7 +70,7 @@ const profilePage = (req, res) => {
 /*
  * Session Exit Account
  */
-const logout = () => { 
+const logout = (req, res) => { 
 	req.logout()
 	res.redirect('/login')
 }
@@ -107,5 +97,6 @@ module.exports = {
 	signinPage,
 	signupPage,
 	profilePage,
+	logout,
 	isLoggedIn
 }

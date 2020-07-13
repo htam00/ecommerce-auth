@@ -1,6 +1,7 @@
 const passport = require('passport')
 
-const { signinStrategy, 
+const { 
+	signinStrategy, 
 	signupStrategy,
 	facebookStrategy,
 	googleStrategy
@@ -16,8 +17,8 @@ const CustomerModel = require('./../../models/Customers')
 const configure = () => {
 	passport.serializeUser(serialize)
 	passport.deserializeUser(deserialize)
-	passport.use(signinStrategy)
-	passport.use(signupStrategy)
+	passport.use('local-signin', signinStrategy)
+	passport.use('local-signup', signupStrategy)
 	passport.use(facebookStrategy)
 	passport.use(googleStrategy)
 }

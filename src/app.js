@@ -17,7 +17,8 @@ const db = require('./config/database')
 const pass = require('./config/passport/configure')
 
 // Import Controllers of Authentication
-const { signinAuth,
+const { 
+	signinAuth,
 	signupAuth,
 	facebookAuth,
 	facebookAuthCallback,
@@ -28,6 +29,7 @@ const { signinAuth,
 	signinPage,
 	signupPage,
 	profilePage,
+	logout,
 	isLoggedIn
 } = require('./controllers/Authentication')
 
@@ -50,11 +52,10 @@ pass.configure()
 
 // Middleware
 app.use(cookieParser())
-app.use(json())
 app.use(urlencoded({ extended: false }))
 app.use(session({
 	secret: process.env.SESSION_SECRET,
-	resave: false,
+	resave: true,
 	saveUninitialized: true
 }))
 app.use(passport.initialize())
@@ -62,9 +63,9 @@ app.use(passport.session())
 app.use(flash())
 
 // Routes
-app.get('/login', signinPage)
+app.get('/signin', signinPage)
 app.get('/signup', signupPage)
-app.post('/login', signinAuth)
+app.post('/signin', signinAuth)
 app.post('/signup', signupAuth)
 
 app.get('/auth/facebook', facebookAuth)
@@ -76,6 +77,7 @@ app.get('/auth/google/callback', googleAuthCallback)
 app.get('/fail', failMessage)
 app.get('/', successMessage)
 app.get('/profile', isLoggedIn, profilePage)
+app.get('/logout', logout)
 
 // Module Export to ServerFile
 module.exports = { app }

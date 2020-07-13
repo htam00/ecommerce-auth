@@ -1,5 +1,9 @@
 node_modules
+
 *.log
 package-*.json
+
 .env
 *.txt
+
+.vscode/

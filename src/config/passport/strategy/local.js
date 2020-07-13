@@ -1,8 +1,8 @@
 const LocalStrategy = require('passport-local').Strategy
-
 const Customer = require('./../../../models/Customers')
 
-const { generateHash,
+const { 
+	generateHash,
 	validPassword 
 } = require('./../validate')
 
@@ -10,8 +10,19 @@ const signinStrategy = new LocalStrategy({
 	usernameField: 'email',
 	passwordField: 'password',
 	passReqToCallback: true
-}, (email, password, done) => {
-	
+}, (req, email, password, done) => {
+	Customer.findOne({'email': email}, (err, user) => {
+		if(err) {
+			return done(err)
+		}
+		if(!user) {
+			return done(null, false, req.flash('singinMessage', 'Usuario Desconhecido'))
+		}
+		if(!validPassword(user, password)) {
+			return done(null, false, req.flash('signinMessage', 'Oops! Senha Incorreta'))
+		}
+		return done(null, user)
+	})
 })
 
 const signupStrategy = new LocalStrategy({
@@ -19,8 +30,8 @@ const signupStrategy = new LocalStrategy({
 	passwordField: 'password',
 	passReqToCallback: true
 }, (req, email, password, done) => {
- const createCustomer = () => {
-	Customer.findOne({'email': email},
+	process.nextTick(() => {
+		Customer.findOne({'email': email},
 		(err, user) => {
 		 if(err) {
 			return done(err)
@@ -41,9 +52,7 @@ const signupStrategy = new LocalStrategy({
 		   })
 		 }
 		})
- }
-
- process.nextTick(createCustomer)
+ })
 })
 
 module.exports = { 
