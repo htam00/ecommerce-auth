@@ -10,6 +10,7 @@ const MongoStore = require('connect-mongo')(session)
 const { urlencoded, 
 	json 
 } = require('body-parser')
+const proxy = require('express-http-proxy')
 const cookieParser = require('cookie-parser')
 
 // Import Module of Configure
@@ -61,6 +62,8 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
+
+app.use('/catalog', isLoggedIn, proxy('http://localhost:5000'))
 
 // Routes
 app.get('/signin', signinPage)
