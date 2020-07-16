@@ -47,6 +47,7 @@ const failMessage = (req, res) => {
 
 const successMessage = (req, res) => {
 	res.send("Success")
+	console.log(req.session)
 }
 
 /*

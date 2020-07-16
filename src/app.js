@@ -1,15 +1,16 @@
 require('dotenv').config()
 
 // Thirty-Party Module 
-const app = require('express')()
-const mongoose = require('mongoose')
-const passport = require('passport')
-const session = require('express-session')
-const flash = require('connect-flash')
+const app 	= require('express')()
+const mongoose 	= require('mongoose')
+const passport 	= require('passport')
+const redis 	= require('redis')
+const session 	= require('express-session')
+const flash 	= require('connect-flash')
+
+const RedisStore = require('connect-redis')(session)
 const MongoStore = require('connect-mongo')(session)
-const { urlencoded, 
-	json 
-} = require('body-parser')
+const { urlencoded, json } = require('body-parser')
 const proxy = require('express-http-proxy')
 const cookieParser = require('cookie-parser')
 
@@ -47,17 +48,25 @@ const sessionStore = new MongoStore({
 })
 */
 
+/*
+ * ------- Redis Session ---------
+ */
+const redisClient = redis.createClient()
+
 // Configure
 db.connect()
 pass.configure()
 
 // Middleware
+app.set('trust proxy', 1)
 app.use(cookieParser())
 app.use(urlencoded({ extended: false }))
 app.use(session({
 	secret: process.env.SESSION_SECRET,
-	resave: true,
-	saveUninitialized: true
+	secure: true,
+	resave: false,
+	saveUninitialized: true,
+	store: new RedisStore({ client: redisClient })
 }))
 app.use(passport.initialize())
 app.use(passport.session())
