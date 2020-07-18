@@ -11,30 +11,15 @@ const flash 	= require('connect-flash')
 const RedisStore = require('connect-redis')(session)
 const MongoStore = require('connect-mongo')(session)
 const { urlencoded, json } = require('body-parser')
-const proxy = require('express-http-proxy')
 const cookieParser = require('cookie-parser')
+
 
 // Import Module of Configure
 const db = require('./config/database')
 const pass = require('./config/passport/configure')
 
-// Import Controllers of Authentication
-const { 
-	signinAuth,
-	signupAuth,
-	facebookAuth,
-	facebookAuthCallback,
-	googleAuth,
-	googleAuthCallback,
-	failMessage,
-	successMessage,
-	signinPage,
-	signupPage,
-	profilePage,
-	logout,
-	isLoggedIn
-} = require('./controllers/Authentication')
-
+// Import Routers Authentication
+const usersRouter = require('./routes')
 
 /*
  * -------- Mongoose Session ------
@@ -72,24 +57,8 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
 
-app.use('/catalog', isLoggedIn, proxy('http://localhost:5000'))
-
 // Routes
-app.get('/signin', signinPage)
-app.get('/signup', signupPage)
-app.post('/signin', signinAuth)
-app.post('/signup', signupAuth)
-
-app.get('/auth/facebook', facebookAuth)
-app.get('/auth/facebook/callback', facebookAuthCallback)
-
-app.get('/auth/google', googleAuth)
-app.get('/auth/google/callback', googleAuthCallback)
-
-app.get('/fail', failMessage)
-app.get('/', successMessage)
-app.get('/profile', isLoggedIn, profilePage)
-app.get('/logout', logout)
+app.use('/', usersRouter)
 
 // Module Export to ServerFile
 module.exports = { app }
