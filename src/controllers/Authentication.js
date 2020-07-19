@@ -55,17 +55,16 @@ const successMessage = (req, res) => {
  */
 const signinPage = (req, res) => {
 	const signinMessage = req.flash('signinMessage')
-	res.send(`Login Page\n${signinMessage}`)
-	console.log(signinMessage)
+	res.render('signin', { message: signinMessage })
 }
 
 const signupPage = (req, res) => {
 	const signupMessage = req.flash('signupMessage')
-	res.send(`SignupPage\n${signupMessage}`)
+	res.render('signup', { message: signupMessage })
 }
 
 const profilePage = (req, res) => {
-	res.json(req.user)
+	res.render('profile', { user: req.user })
 }
 
 /*

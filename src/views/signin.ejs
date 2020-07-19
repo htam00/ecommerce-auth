@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce|Login</title>
+</head>
+<body>
+    <div class="message">
+        <% if(message.length > 0) { %>
+            <% message %>
+        <% } %>
+    </div>
+    <form action="/signin" method="post">
+        <input type="email" name="email" id="email">
+        <input type="password" name="password" id="password">
+        <button type="submit">
+            Sign in
+        </button>
+    </form>
+    <div>
+        <a href="/signup">Register</a>
+    </div>
+</body>
+</html>

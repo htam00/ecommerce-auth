@@ -1,4 +1,5 @@
 const { Router } = require('express')
+const { homePage } = require('./controllers/index')
 const {
 	signinPage,
 	signupPage,
@@ -14,6 +15,8 @@ const {
 const { isLoggedIn } = require('./controllers/Authentication')
 
 const router = new Router()
+
+router.get('/', (req, res) => res.render('home'))
 
 router.get('/signin', signinPage)
 router.post('signin', signinAuth)

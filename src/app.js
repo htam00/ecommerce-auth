@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+const path = require('path')
+
 // Thirty-Party Module 
 const app 	= require('express')()
 const mongoose 	= require('mongoose')
@@ -7,6 +9,7 @@ const passport 	= require('passport')
 const redis 	= require('redis')
 const session 	= require('express-session')
 const flash 	= require('connect-flash')
+const helmet 	= require('helmet')
 
 const RedisStore = require('connect-redis')(session)
 const MongoStore = require('connect-mongo')(session)
@@ -44,6 +47,10 @@ pass.configure()
 
 // Middleware
 app.set('trust proxy', 1)
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
+
+app.use(helmet())
 app.use(cookieParser())
 app.use(urlencoded({ extended: false }))
 app.use(session({
